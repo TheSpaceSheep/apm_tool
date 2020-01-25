@@ -3,7 +3,7 @@ from pynput.keyboard import Key, Listener as KListener
 from pynput.mouse import Listener as MListener
 import time
 import tkinter as tk
-
+from simpleaudio import WaveObject
 from classes import Graph
 
 width = 460
@@ -14,6 +14,7 @@ height = 300
 
 def reset_button_callback():
     graph.reset()
+    WaveObject.from_wave_file("reset.wav").play()
 
 
 def create_reset_button():
@@ -46,11 +47,13 @@ def main_button_callback():
         if reset_button_f is not None:
             destroy_reset_button()
         graph.play()
+        WaveObject.from_wave_file("start_tracking.wav").play()
     else:
         main_button.config(text="Start Tracking")
         main_button.config(background="#3030D0", activebackground="#3030D0")
         graph.pause()
         create_reset_button()
+        WaveObject.from_wave_file("stop_tracking.wav").play()
 
     tracking = not tracking
     update_stats()
@@ -68,14 +71,16 @@ key_history = []
 
 
 def on_press(key):
-    if key not in key_history: key_history.append(key)
+    if key not in key_history:
+        key_history.append(key)
+        if tracking:
+            graph.keypresses += 1
+            graph.add_action(time.time())
+
     if key_history == [Key.ctrl, Key.enter]:
         main_button_callback()
     if key_history == [Key.ctrl, Key.backspace]:
         reset_button_callback()
-    if tracking:
-        graph.keypresses += 1
-        graph.add_action(time.time())
 
 
 def on_release(key):
