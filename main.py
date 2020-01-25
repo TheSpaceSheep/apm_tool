@@ -90,7 +90,6 @@ def on_press(key):
 def on_release(key):
     if key in key_history:
         key_history.remove(key)
-        print(key_history)
 
 
 def on_click(x, y, button, pressed):
