@@ -71,16 +71,19 @@ key_history = []
 
 
 def on_press(key):
-    if key not in key_history:
-        key_history.append(key)
-        if tracking:
-            graph.keypresses += 1
-            graph.add_action(time.time())
-
-    if key_history == [Key.ctrl, Key.enter]:
+    if key not in key_history: key_history.append(key)
+    if Key.enter in key_history and (Key.ctrl in key_history \
+                                 or Key.ctrl_l in key_history \
+                                 or Key.ctrl_r in key_history):
         main_button_callback()
-    if key_history == [Key.ctrl, Key.backspace]:
-        reset_button_callback()
+    if Key.backspace in key_history and (Key.ctrl in key_history \
+                                 or Key.ctrl_l in key_history \
+                                 or Key.ctrl_r in key_history):
+        if not tracking:
+            reset_button_callback()
+    if tracking:
+        graph.keypresses += 1
+        graph.add_action(time.time())
 
 
 def on_release(key):
