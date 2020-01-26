@@ -119,7 +119,7 @@ class Graph(tk.Canvas):
                 self.draw_point(self.points, i, redraw_axis=False)
         if intro:
             self.create_text(self.width//2, self.height//2,
-                             text="Start : Ctrl+Enter\nReset : Ctrl+Backspace\nToggle hover-apm : Ctrl+*",
+                             text="Start : Ctrl+Enter\nReset : Ctrl+Backspace\nToggle hover-apm : Ctrl+Inser",
                              font="monospace 18",
                              anchor="c",
                              fill="#777777")

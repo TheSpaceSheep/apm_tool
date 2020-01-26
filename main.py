@@ -26,14 +26,21 @@ def on_click_hover(e):
 def create_hover_apm():
     global hover_apm
     hover_apm = tk.Toplevel()
+    hover_apm.overrideredirect(True)
+    hover_apm.wm_attributes("-topmost", 1)
     w = hover_apm.winfo_screenwidth()
     h = hover_apm.winfo_screenheight()
     text = tk.Label(hover_apm, textvariable=var_cur, fg="white",
-             bg="dark grey", font="Arial 10 bold")
+             bg="#4D3300", font="Arial 10 bold")
     hover_apm.geometry("+{}+{}".format(w//2, 3*h//50))
     text.pack(fill=tk.BOTH, expand=True)
     hover_apm.bind('<Button-1>', on_click_hover)
-    hover_apm.overrideredirect(True)
+
+    def ensure_top():
+        hover_apm.lift()
+        hover_apm.after(100, ensure_top)
+
+    # ensure_top()
 
 
 def destroy_hover_apm():
@@ -120,7 +127,8 @@ def on_press(key):
             if Key.backspace in key_history:
                 if not tracking:
                     reset_button_callback()
-            if KeyCode.from_char('*') in key_history:
+
+            if Key.insert in key_history:
                 toggle_hover_apm()
         if tracking:
             graph.keypresses += 1
