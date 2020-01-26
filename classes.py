@@ -77,7 +77,7 @@ class Graph(tk.Canvas):
             x1 = int((pts[i][0] - self.min_x) / (self.max_x - self.min_x) * self.width)
             y1 = int((pts[i][1] - self.min_y) / (self.max_y - self.min_y) * self.height)
             y1 = self.height - y1
-            self.create_line(x0, y0, x1, y1, fill='#6666FF', width=5)
+            self.create_line(x0, y0, x1, y1, fill='#6666FF', width=2)
             self.create_polygon(x0, self.height,
                                 x0, y0,
                                 x1, y1,
