@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pynput.keyboard import Key, Listener as KListener
+from pynput.keyboard import Key, KeyCode, Listener as KListener
 from pynput.mouse import Listener as MListener
 import time
 import tkinter as tk
@@ -9,8 +9,47 @@ from classes import Graph
 width = 460
 height = 300
 
+holding_mouse = False
+
 
 """ -------------------------  GUI Actions  --------------------------------"""
+
+def on_click_hover(e):
+    global holding_mouse
+    x = Fenetre.winfo_pointerx() - hover_apm.winfo_width() // 2
+    y = Fenetre.winfo_pointery() - hover_apm.winfo_height() // 2
+    hover_apm.geometry("+{}+{}".format(x, y))
+    if holding_mouse:
+        hover_apm.after(10, lambda: on_click_hover(0))
+
+
+def create_hover_apm():
+    global hover_apm
+    hover_apm = tk.Toplevel()
+    w = hover_apm.winfo_screenwidth()
+    h = hover_apm.winfo_screenheight()
+    text = tk.Label(hover_apm, textvariable=var_cur, fg="white",
+             bg="dark grey", font="Arial 10 bold")
+    hover_apm.geometry("+{}+{}".format(w//2, 3*h//50))
+    text.pack(fill=tk.BOTH, expand=True)
+    hover_apm.bind('<Button-1>', on_click_hover)
+    hover_apm.overrideredirect(True)
+
+
+def destroy_hover_apm():
+    global hover_apm
+    hover_apm.destroy()
+    hover_apm = None
+
+
+def toggle_hover_apm():
+    global hover_active
+    if not hover_active:
+        create_hover_apm()
+    else:
+        destroy_hover_apm()
+    hover_active = not hover_active
+
 
 def reset_button_callback():
     graph.reset()
@@ -73,15 +112,16 @@ key_history = []
 def on_press(key):
     if key not in key_history:
         key_history.append(key)
-        if Key.enter in key_history and (Key.ctrl in key_history \
-                                 or Key.ctrl_l in key_history \
-                                 or Key.ctrl_r in key_history):
-            main_button_callback()
-        if Key.backspace in key_history and (Key.ctrl in key_history \
-                                 or Key.ctrl_l in key_history \
-                                 or Key.ctrl_r in key_history):
-            if not tracking:
-                reset_button_callback()
+        if Key.ctrl in key_history \
+        or Key.ctrl_l in key_history \
+        or Key.ctrl_r in key_history:
+            if Key.enter in key_history:
+                main_button_callback()
+            if Key.backspace in key_history:
+                if not tracking:
+                    reset_button_callback()
+            if KeyCode.from_char('*') in key_history:
+                toggle_hover_apm()
         if tracking:
             graph.keypresses += 1
             graph.add_action(time.time())
@@ -93,10 +133,15 @@ def on_release(key):
 
 
 def on_click(x, y, button, pressed):
+    global holding_mouse
     if tracking and pressed:
         graph.clicks += 1
         graph.add_action(time.time())
 
+    if pressed:
+        holding_mouse = True
+    else:
+        holding_mouse = False
 
 klistener = KListener(on_press=on_press, on_release=on_release)
 mlistener = MListener(on_click=on_click)
@@ -125,6 +170,10 @@ main_button.pack(fill="both", expand=1)
 
 # Reset Button (not apparent yet)
 reset_button_f = None
+
+# Hover apm (not enabled yet)
+hover_active = False
+hover_apm = None
 
 # Top-right corner stats
 stats = tk.Frame(Fenetre, width=2*width//3, height=height//4,

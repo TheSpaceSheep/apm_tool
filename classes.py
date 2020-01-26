@@ -38,6 +38,8 @@ class Graph(tk.Canvas):
         self.max_apm = 0
         self.avg_apm = 0
         self.active_time = 0
+        self.display_emb = False
+        self.embedded_apm = None
 
 
     def axis(self):
@@ -117,7 +119,7 @@ class Graph(tk.Canvas):
                 self.draw_point(self.points, i, redraw_axis=False)
         if intro:
             self.create_text(self.width//2, self.height//2,
-                             text="Start : Ctrl+Enter\nReset : Ctrl+Backspace",
+                             text="Start : Ctrl+Enter\nReset : Ctrl+Backspace\nToggle hover-apm : Ctrl+*",
                              font="monospace 18",
                              anchor="c",
                              fill="#777777")
@@ -208,3 +210,18 @@ class Graph(tk.Canvas):
         self.points = []
         self.all_points = []
         self.display(intro=True)
+
+
+class HoveringText(tk.Toplevel):
+    def __init__(self, text="Hello world"):
+        super().__init__()
+        w = self.winfo_screenwidth()
+        h = self.winfo_screenheight()
+        self.geometry("100x20+{}+{}".format(w//2, 3*h//50))
+        var_cur = tk.StringVar()
+        var_cur.set("Current : 0 APM")
+        cur_apm_label = tk.Label(self, textvariable=var_cur, fg="white",
+                 bg="grey", font="Arial 12 bold")
+        cur_apm_label.place(x=0, y=0)
+        self.overrideredirect(True)
+        #self.embedded_apm.display("Current APM: {}".format(self.cur_apm))
