@@ -33,8 +33,8 @@ def create_hover_apm():
     hover_apm.wm_attributes("-topmost", 1)
     w = hover_apm.winfo_screenwidth()
     h = hover_apm.winfo_screenheight()
-    text = tk.Label(hover_apm, textvariable=var_cur, fg="white",
-             bg="#4D3300", font="Arial 10 bold")
+    text = tk.Label(hover_apm, textvariable=var_cur_hover, fg="white",
+             bg="#4D3300", font="Arial 13 bold")
     hover_apm.geometry("+{}+{}".format(w//2, 3*h//50))
     text.pack(fill=tk.BOTH, expand=True)
     hover_apm.bind('<Button-1>', on_click_hover)
@@ -202,12 +202,14 @@ stats_right.place(x=width//3, y=0)
 stats_under_button.place(x=0, y=height//8)
 
 var_cur = tk.StringVar()
+var_cur_hover = tk.StringVar()
 var_max = tk.StringVar()
 var_avg = tk.StringVar()
 var_active = tk.StringVar()
 var_kc = tk.StringVar()
 
 var_cur.set("Current : 0 APM")
+var_cur_hover.set("0 APM")
 var_max.set("Max : 0 APM")
 var_avg.set("Avg : 0 APM")
 var_active.set("Active Time : 0 %")
@@ -246,6 +248,7 @@ def update_stats():
     keys_clicks = graph.keypresses / max((graph.clicks + graph.keypresses), 1)
     keys_clicks = round(100 * keys_clicks, 2)
     var_cur.set("Current : {} APM".format(cur_apm))
+    var_cur_hover.set("{} APM".format(cur_apm))
     var_max.set("Max : {} APM".format(max_apm))
     var_avg.set("Avg : {} APM".format(avg_apm))
     var_kc.set("Keypresses : {}%".format(keys_clicks))
