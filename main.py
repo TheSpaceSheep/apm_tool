@@ -6,6 +6,8 @@ import tkinter as tk
 from simpleaudio import WaveObject
 from classes import Graph
 
+version = "1.2"
+
 width = 460
 height = 300
 
@@ -27,6 +29,7 @@ def create_hover_apm():
     global hover_apm
     hover_apm = tk.Toplevel()
     hover_apm.overrideredirect(True)
+    hover_apm.iconbitmap('icon.ico')
     hover_apm.wm_attributes("-topmost", 1)
     w = hover_apm.winfo_screenwidth()
     h = hover_apm.winfo_screenheight()
@@ -162,9 +165,9 @@ mlistener.start()
 # Initializing Window
 Fenetre = tk.Tk()
 Fenetre.geometry("{}x{}".format(width, height))
-Fenetre.title("APM_tool v1.0")
+Fenetre.title("apm_tool v.{}".format(version))
 Fenetre.config(background="black")
-# Fenetre.overrideredirect(True)  # remove borders
+Fenetre.iconbitmap('icon.ico')
 
 # Main button that toggles apm tracking
 main_button_f = tk.Frame(Fenetre, width=width//3, height=height//8)

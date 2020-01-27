@@ -11,6 +11,14 @@ import time
 sample_size = 10
 width = 460
 
+
+def sec_to_hms(seconds):
+    s = seconds % 60
+    m = (seconds//60) % 60
+    h = seconds // 60 // 60
+    return "{}:{}:{}".format(h, m, s)
+     
+
 class Graph(tk.Canvas):
     def __init__(self, master, width, height, max_x=10, max_y=100, bg='white',
                  refresh_rate = 15, window_size=7):
@@ -56,8 +64,9 @@ class Graph(tk.Canvas):
             x = int(i * div_x / (self.max_x - self.min_x) * self.width)
             self.create_line(x, self.height, x, self.height-5, fill=color)
 
+            t = sec_to_hms(int(self.min_x + i*div_x))
             self.create_text(x, self.height-10,
-                             text="{}".format(int(self.min_x + i*div_x)),
+                             text="{}".format(t),
                              font='Arial 7', fill=color)
 
         for i in range(1, nb_points_y):
@@ -65,7 +74,6 @@ class Graph(tk.Canvas):
             self.create_line(0, self.height - y, 5, self.height - y,
                              fill=color)
 
-            #TODO: sec_to_hms
             self.create_text(7, self.height - y, text="{}".format(int(self.min_y + i*div_y)),
                              font='Arial 7', fill=color, anchor='w')
 
@@ -119,10 +127,11 @@ class Graph(tk.Canvas):
                 self.draw_point(self.points, i, redraw_axis=False)
         if intro:
             self.create_text(self.width//2, self.height//2,
-                             text="Start : Ctrl+Enter\nReset : Ctrl+Backspace\nToggle hover-apm : Ctrl+Inser",
+                             text="Start : Ctrl+Enter\nReset : Ctrl+Backspace\nToggle hovering counter : Ctrl+Inser",
                              font="monospace 18",
                              anchor="c",
-                             fill="#777777")
+                             fill="#777777",
+                             justify='center')
         else:
             self.axis()
 
@@ -210,18 +219,3 @@ class Graph(tk.Canvas):
         self.points = []
         self.all_points = []
         self.display(intro=True)
-
-
-class HoveringText(tk.Toplevel):
-    def __init__(self, text="Hello world"):
-        super().__init__()
-        w = self.winfo_screenwidth()
-        h = self.winfo_screenheight()
-        self.geometry("100x20+{}+{}".format(w//2, 3*h//50))
-        var_cur = tk.StringVar()
-        var_cur.set("Current : 0 APM")
-        cur_apm_label = tk.Label(self, textvariable=var_cur, fg="white",
-                 bg="grey", font="Arial 12 bold")
-        cur_apm_label.place(x=0, y=0)
-        self.overrideredirect(True)
-        #self.embedded_apm.display("Current APM: {}".format(self.cur_apm))
