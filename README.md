@@ -4,7 +4,7 @@ A simple Action-Per-Minute real-time tracker, to provide stats when learning to 
 ## Installation
 
 ### From setup (Windows)
-Download and execute the setup installation executable
+Download and execute the setup installation executable. The setup was made using Inno Setup.
 
 ### From source
 Dependencies
