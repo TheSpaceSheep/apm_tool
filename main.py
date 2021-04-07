@@ -5,14 +5,15 @@ import time
 import tkinter as tk
 from simpleaudio import WaveObject
 from classes import Graph
-import game_overlay_sdk.injector as gosi
 
-gosi.enable_monitor_logger()
-gosi.start_monitor("AoE2DE_s.exe")
-#gosi.run_process("C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\AoE2DE_s.exe",
+# import game_overlay_sdk.injector as gosi
+
+# gosi.enable_monitor_logger()
+# gosi.start_monitor("AoE2DE_s.exe")
+# gosi.run_process("C:\Program Files (x86)\Steam\steamapps\common\AoE2DE\AoE2DE_s.exe",
 #                 steam_app_id=813780)
-while 1:
-    gosi.send_message("Hello World")
+# while 1:
+#    gosi.send_message("Hello World")
     
 version = "1.2"
 
