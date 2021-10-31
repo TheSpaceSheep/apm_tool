@@ -9,6 +9,12 @@ Download and execute the setup installation executable. The setup was made using
 ### From source
 Clone the repository (or download all files in the same folder) and run main.py using a python interpreter.
 
+## Shortcuts
+Ctrl + Enter : Start or stop APM tracker
+Ctrl + Backspace (while not tracking) : Reset APM data
+Ctrl + Insert : Toggle hover APM visual
+
+
 Dependencies
 * Python 3
 * pynput
